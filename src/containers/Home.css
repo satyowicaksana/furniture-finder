@@ -2,8 +2,8 @@
   background: #106CC8;
 }
 
-.header .container {
-  max-width: 700px;
+.container {
+  max-width: 800px;
   padding: 20px;
   margin: auto;
 }
@@ -35,4 +35,26 @@
 
 input {
   width: calc(50% - 15px);
+}
+
+.furn-card {
+  padding: 20px;
+}
+
+.furn-styles {
+  color: #659FDC;
+}
+
+.furn-delivery {
+  color: #106CC8;
+  text-align: right;
+  text-decoration: underline;
+}
+
+h3, h4 {
+  margin: 0;
+}
+
+.price {
+  color: #FF9902;
 }
