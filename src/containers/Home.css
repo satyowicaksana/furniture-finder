@@ -3,9 +3,13 @@
 }
 
 .container {
-  max-width: 800px;
+  max-width: 900px;
   padding: 20px;
   margin: auto;
+}
+
+.content .container {
+  margin-bottom: 40px;
 }
 
 .row-form {
@@ -39,6 +43,7 @@ input {
 
 .furn-card {
   padding: 20px;
+  height: calc(100% - 40px);
 }
 
 .furn-styles {

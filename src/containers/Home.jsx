@@ -1,8 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Home.css'
 import { Grid, Paper } from '@material-ui/core'
 
 export default () => {
+  const [products, setProducts] = useState([])
+  const [styles, setStyles] = useState([])
+
+  const fetchProducts = async () => {
+    const response = await fetch('http://www.mocky.io/v2/5c9105cb330000112b649af8')
+    const { products, furniture_styles } = await response.json()
+    setProducts(products)
+    setStyles(furniture_styles)
+  }
+
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
   return (
     <>
       <div className="header">
@@ -20,30 +34,24 @@ export default () => {
       <div className="content">
         <div className="container">
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <Paper elevation={2} className="furn-card">
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={10}>
-                  <h3>Product Name</h3>
+          {products.map(product => (
+            <Grid item xs={12} sm={6}>
+              <Paper elevation={2} className="furn-card">
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={8}>
+                    <h3>{product.name}</h3>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <h4 className="price">IDR {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h4>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={2}>
-                  <h4 className="price">Price</h4>
-                </Grid>
-              </Grid>
-              <p>You can specify some description text in here.</p>
-              <p className="furn-styles">Furniture Styles</p>
-              <h4 className="furn-delivery">Delivery Days</h4>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Paper elevation={2} className="furn-card">xs=12 sm=6</Paper>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Paper elevation={2} className="furn-card">xs=12 sm=6</Paper>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Paper elevation={2} className="furn-card">xs=12 sm=6</Paper>
-          </Grid>
+                <p>{product.description.substring(0, 114)}...</p>
+                <p className="furn-styles">{product.furniture_style.join(', ')}</p>
+                <h4 className="furn-delivery">{product.delivery_time} Days</h4>
+              </Paper>
+            </Grid>
+            )
+          )}
         </Grid>
         </div>
       </div>
