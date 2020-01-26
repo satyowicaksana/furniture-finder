@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Home.css'
-import { Grid, Paper, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, Input } from '@material-ui/core'
+import { Grid, Paper, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, Input, CircularProgress } from '@material-ui/core'
 
 export default () => {
   const [products, setProducts] = useState([])
@@ -59,6 +59,11 @@ export default () => {
     },
   }
 
+  if(products.length === 0) {
+    return (
+      <CircularProgress className="center" />
+    )
+  }
   return (
     <>
       <div className="header">
@@ -117,6 +122,11 @@ export default () => {
       </div>
       <div className="content">
         <div className="container">
+        {
+          displayedProducts.length === 0 && (
+            <p className="center">No search result found.</p>
+          )
+        }
         <Grid container spacing={3}>
           {displayedProducts.map(product => (
             <Grid key={product.name} item xs={12} sm={6}>
