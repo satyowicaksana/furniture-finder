@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Home.css'
 import { Grid, Paper, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, Input } from '@material-ui/core'
-import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 export default () => {
   const [products, setProducts] = useState([])
@@ -10,7 +9,6 @@ export default () => {
   const [search, setSearch] = useState('')
   const [searchStyles, setSearchStyles] = useState([])
   
-
   const fetchProducts = async () => {
     const response = await fetch('http://www.mocky.io/v2/5c9105cb330000112b649af8')
     const { products, furniture_styles } = await response.json()
@@ -20,15 +18,18 @@ export default () => {
   }
 
   useEffect(() => {
-    let reg = new RegExp(search, 'gi')
-    let filtered = products.filter(product => product.name.match(reg))
-    setDisplayedProducts(filtered)
-  }, [search, products])
-
-  useEffect(() => {
     fetchProducts()
   }, [])
   
+  useEffect(() => {
+    let reg = new RegExp(search, 'gi')
+    let filtered = products.filter(product => (
+      product.name.match(reg) && 
+      searchStyles.every(style => product.furniture_style.includes(style))
+    ))
+    setDisplayedProducts(filtered)
+  }, [search, products, searchStyles])
+
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -36,28 +37,10 @@ export default () => {
       style: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
         width: 250,
+        marginTop: '45px',
       },
     },
-  };
-  
-  const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-  ];
-
-  const [personName, setPersonName] = React.useState([]);
-
-  const handleChange = event => {
-    setPersonName(event.target.value);
-  };
+  }
 
   return (
     <>
@@ -73,16 +56,16 @@ export default () => {
                 labelId="demo-mutiple-checkbox-label"
                 id="demo-mutiple-checkbox"
                 multiple
-                value={personName}
-                onChange={handleChange}
+                value={searchStyles}
+                onChange={e => setSearchStyles(e.target.value)}
                 input={<Input />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
               >
-                {names.map(name => (
+                {styles.map(name => (
                   <MenuItem key={name} value={name}>
                     <ListItemText primary={name} />
-                    <Checkbox color="primary" checked={personName.indexOf(name) > -1} />
+                    <Checkbox color="primary" checked={searchStyles.indexOf(name) > -1} />
                   </MenuItem>
                 ))}
               </Select>
