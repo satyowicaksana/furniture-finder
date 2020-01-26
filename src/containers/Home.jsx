@@ -124,7 +124,7 @@ export default () => {
         <div className="container">
         {
           displayedProducts.length === 0 && (
-            <p className="center">No search result found.</p>
+            <p className="not-found">No search result found.</p>
           )
         }
         <Grid container spacing={3}>
