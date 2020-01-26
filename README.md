@@ -1,8 +1,14 @@
+Access the deployed web from [https://satyowicaksana.github.io/furniture-finder/](https://satyowicaksana.github.io/furniture-finder/).
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm install`
+
+Install the dependencies needed for the app to run.
 
 ### `npm start`
 
