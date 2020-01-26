@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import './Home.css'
-import { Grid, Paper } from '@material-ui/core'
+import { Grid, Paper, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, Input } from '@material-ui/core'
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 export default () => {
   const [products, setProducts] = useState([])
   const [displayedProducts, setDisplayedProducts] = useState([])
   const [styles, setStyles] = useState([])
   const [search, setSearch] = useState('')
+  const [searchStyles, setSearchStyles] = useState([])
+  
 
   const fetchProducts = async () => {
     const response = await fetch('http://www.mocky.io/v2/5c9105cb330000112b649af8')
@@ -25,6 +28,36 @@ export default () => {
   useEffect(() => {
     fetchProducts()
   }, [])
+  
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  
+  const names = [
+    'Oliver Hansen',
+    'Van Henry',
+    'April Tucker',
+    'Ralph Hubbard',
+    'Omar Alexander',
+    'Carlos Abbott',
+    'Miriam Wagner',
+    'Bradley Wilkerson',
+    'Virginia Andrews',
+    'Kelly Snyder',
+  ];
+
+  const [personName, setPersonName] = React.useState([]);
+
+  const handleChange = event => {
+    setPersonName(event.target.value);
+  };
 
   return (
     <>
@@ -33,8 +66,27 @@ export default () => {
           <input value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder="Search Furniture" className="search">
           </input>
           <div className="row-form">
-            <input type="text" placeholder="Search Furniture">
-            </input>
+            <FormControl className="form-control">
+              <InputLabel className="input-label">Furniture Style</InputLabel>
+              <Select
+                className="select"
+                labelId="demo-mutiple-checkbox-label"
+                id="demo-mutiple-checkbox"
+                multiple
+                value={personName}
+                onChange={handleChange}
+                input={<Input />}
+                renderValue={selected => selected.join(', ')}
+                MenuProps={MenuProps}
+              >
+                {names.map(name => (
+                  <MenuItem key={name} value={name}>
+                    <ListItemText primary={name} />
+                    <Checkbox color="primary" checked={personName.indexOf(name) > -1} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <input type="text" placeholder="Search Furniture">
             </input>
           </div>

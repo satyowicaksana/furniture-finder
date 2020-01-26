@@ -63,3 +63,21 @@ h3, h4 {
 .price {
   color: #FF9902;
 }
+
+.form-control {
+  margin: 20px;
+  width: calc(50% - 10px);
+  background: white;
+}
+
+.menu-item {
+  height: 300px;
+}
+
+.input-label {
+  margin-left: 20px;
+}
+
+.select {
+  padding-left: 20px;
+}
