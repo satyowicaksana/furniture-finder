@@ -12,12 +12,6 @@
   margin-bottom: 40px;
 }
 
-.row-form {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
 .search {
   font-size: 20px;
   background: none;
@@ -26,6 +20,7 @@
   font-weight: bold;
   border-bottom: 1px solid #8EA6C0;
   padding: 5px;
+  width: calc(100% - 10px);
 }
 
 .search::placeholder {
@@ -64,9 +59,13 @@ h3, h4 {
   color: #FF9902;
 }
 
+.form-container {
+  margin-top: 15px !important;
+}
+
 .form-control {
   margin: 20px;
-  width: calc(50% - 10px);
+  width: 100%;
   background: white;
 }
 

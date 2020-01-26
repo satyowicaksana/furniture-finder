@@ -8,6 +8,8 @@ export default () => {
   const [styles, setStyles] = useState([])
   const [search, setSearch] = useState('')
   const [searchStyles, setSearchStyles] = useState([])
+  const [delivTimes, setDelivTimes] = useState([])
+  const [searchDelivTimes, setSearchDelivTimes] = useState([])
   
   const fetchProducts = async () => {
     const response = await fetch('http://www.mocky.io/v2/5c9105cb330000112b649af8')
@@ -19,16 +21,31 @@ export default () => {
 
   useEffect(() => {
     fetchProducts()
+    setDelivTimes(['1 week', '2 weeks', '1 month', '2 months'])
   }, [])
   
   useEffect(() => {
     let reg = new RegExp(search, 'gi')
+    console.log(searchDelivTimes)
+    let searchDelivTimesDay = []
+    searchDelivTimes.forEach(delivTime => {
+      if(delivTime === '1 week') {
+        searchDelivTimesDay.push(7)
+      } else if(delivTime === '2 weeks') {
+        searchDelivTimesDay.push(14)
+      } else if(delivTime === '1 month') {
+        searchDelivTimesDay.push(30)
+      } else {
+        searchDelivTimesDay.push(60)
+      }
+    })
     let filtered = products.filter(product => (
       product.name.match(reg) && 
-      searchStyles.every(style => product.furniture_style.includes(style))
+      searchStyles.every(style => product.furniture_style.includes(style)) &&
+      searchDelivTimesDay.every(delivDay => product.delivery_time <= delivDay)
     ))
     setDisplayedProducts(filtered)
-  }, [search, products, searchStyles])
+  }, [search, products, searchStyles, searchDelivTimes])
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -46,33 +63,56 @@ export default () => {
     <>
       <div className="header">
         <div className="container">
-          <input value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder="Search Furniture" className="search">
-          </input>
-          <div className="row-form">
-            <FormControl className="form-control">
-              <InputLabel className="input-label">Furniture Style</InputLabel>
-              <Select
-                className="select"
-                labelId="demo-mutiple-checkbox-label"
-                id="demo-mutiple-checkbox"
-                multiple
-                value={searchStyles}
-                onChange={e => setSearchStyles(e.target.value)}
-                input={<Input />}
-                renderValue={selected => selected.join(', ')}
-                MenuProps={MenuProps}
-              >
-                {styles.map(name => (
-                  <MenuItem key={name} value={name}>
-                    <ListItemText primary={name} />
-                    <Checkbox color="primary" checked={searchStyles.indexOf(name) > -1} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <input type="text" placeholder="Search Furniture">
-            </input>
-          </div>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
+              <input value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder="Search Furniture" className="search">
+              </input>
+            </Grid>
+          </Grid>
+          <Grid container spacing={3} className="form-container">
+            <Grid item xs={12} sm={6}>
+              <FormControl className="form-control">
+                <InputLabel className="input-label">Furniture Style</InputLabel>
+                <Select
+                  className="select"
+                  multiple
+                  value={searchStyles}
+                  onChange={e => setSearchStyles(e.target.value)}
+                  input={<Input />}
+                  renderValue={selected => selected.join(', ')}
+                  MenuProps={MenuProps}
+                >
+                  {styles.map(name => (
+                    <MenuItem key={name} value={name}>
+                      <ListItemText primary={name} />
+                      <Checkbox color="primary" checked={searchStyles.indexOf(name) > -1} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl className="form-control">
+                <InputLabel className="input-label">Delivery Time</InputLabel>
+                <Select
+                  className="select"
+                  multiple
+                  value={searchDelivTimes}
+                  onChange={e => setSearchDelivTimes(e.target.value)}
+                  input={<Input />}
+                  renderValue={selected => selected.join(', ')}
+                  MenuProps={MenuProps}
+                >
+                  {delivTimes.map(name => (
+                    <MenuItem key={name} value={name}>
+                      <ListItemText primary={name} />
+                      <Checkbox color="primary" checked={searchDelivTimes.indexOf(name) > -1} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
         </div>
       </div>
       <div className="content">
